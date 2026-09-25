@@ -1,0 +1,4 @@
+flask>=2.3
+flask-minify>=0.42
+pyarabic>=0.6.14
+pytest>=7.0

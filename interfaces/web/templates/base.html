@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#04595E">
+
+  {% block document_title %}
+  {% if verb %}
+  <title id="page-title" data-verb="{{ verb }}">Asy-Syafee | تصريف الفعل {{ verb }}</title>
+  {% else %}
+  <title id="page-title">Asy-Syafee: Konjugasi Kata Kerja Bahasa Arab | تصريف الأفعال العربية</title>
+  {% endif %}
+  {% endblock %}
+
+
+  <!-- Favicon -->
+  <link href="{{ url_for('static', filename='images/favicon1.png') }}" rel="icon" type="image/png">
+
+  <!-- Preload critical fonts (body, headline, table) -->
+  <link rel="preload" href="{{ url_for('static', filename='fonts/ReadexPro-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/NotoKufiArabic-ExtraBold.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/Amiri-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body class="page-body">
+
+<!-- ── Floating pill navbar ─────────────────────────────────────────── -->
+<nav class="navbar-pill no-print" aria-label="التنقل الرئيسي">
+
+  <!-- Wordmark -->
+  <a href="{{ url_for('home') }}" class="wordmark" aria-label="Asy-Syafee - Beranda">
+    <span class="wordmark-latin">Asy-Syafee</span>
+    <span class="wordmark-arabic">الشافعي</span>
+  </a>
+
+
+  <!-- Desktop actions -->
+  <div class="nav-actions">
+    <!-- Language Switcher (ID / AR) -->
+    <div class="lang-switcher" role="group" aria-label="Pilih Bahasa / اختر اللغة">
+      <button class="lang-btn active" type="button" data-lang-btn="id" aria-pressed="true">🇮🇩 ID</button>
+      <button class="lang-btn"        type="button" data-lang-btn="ar" aria-pressed="false">🇸🇦 AR</button>
+    </div>
+
+    <!-- Search icon: focuses verb input -->
+
+    <button class="btn-icon" aria-label="بحث" data-action="search" type="button" data-i18n-title="searchTooltip">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+      </svg>
+    </button>
+
+    <!-- Settings popover trigger -->
+    <div class="settings-wrap" style="position:relative">
+      <button class="btn-icon" aria-label="إعدادات العرض" data-action="settings" type="button" aria-haspopup="true" aria-expanded="false" data-i18n-title="settingsTooltip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+
+      <!-- Settings popover -->
+      <div class="settings-popover" id="settings-popover" role="dialog" aria-label="إعدادات العرض">
+        <div class="settings-popover-row">
+          <span class="settings-popover-label" data-i18n="settingsFontSize">Ukuran Teks</span>
+          <div class="font-size-ctrl">
+            <button type="button" id="font-size-dec" aria-label="تصغير الخط">−</button>
+            <span class="font-size-val" id="font-size-val">100%</span>
+            <button type="button" id="font-size-inc" aria-label="تكبير الخط">+</button>
+          </div>
+        </div>
+        <div class="settings-popover-row">
+          <span class="settings-popover-label" data-i18n="settingsColorTashkeel">Warna Harakat</span>
+          <label class="toggle-switch" aria-label="تلوين الحركات">
+            <input type="checkbox" id="colored-harakat-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-popover-row">
+          <button type="button" id="settings-reset" class="btn-pill-outline" style="font-size:.8rem;padding:6px 14px;min-height:36px" data-i18n="settingsReset">Reset Pengaturan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile hamburger -->
+  <button class="navbar-hamburger" aria-label="فتح القائمة" aria-expanded="false" aria-controls="nav-sheet" type="button">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- Mobile nav sheet overlay -->
+<div class="nav-sheet" id="nav-sheet" role="dialog" aria-label="القائمة" aria-modal="true">
+  <div class="nav-sheet-panel">
+    <button class="nav-sheet-close" id="nav-sheet-close" aria-label="إغلاق القائمة" type="button">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <a href="{{ url_for('home') }}" class="wordmark" style="margin-bottom:8px">
+      <span class="wordmark-latin">Asy-Syafee</span>
+      <span class="wordmark-arabic">الشافعي</span>
+    </a>
+
+    <!-- Mobile Language Switcher -->
+    <div class="lang-switcher" role="group" aria-label="Pilih Bahasa" style="margin-bottom: 8px; align-self: flex-start;">
+      <button class="lang-btn active" type="button" data-lang-btn="id">🇮🇩 ID</button>
+      <button class="lang-btn"        type="button" data-lang-btn="ar">🇸🇦 AR</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Page content ──────────────────────────────────────────────────── -->
+{% block content %}{% endblock %}
+
+<!-- ── Footer ────────────────────────────────────────────────────────── -->
+{% block footer %}{% endblock %}
+
+
+<!-- ── JavaScript (ES modules — no inline scripts for CSP) ──────────── -->
+{% block js %}
+<script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

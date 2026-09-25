@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block document_title %}<title>قطرب | اتصل بنا</title>{% endblock %}
+
+{% block content %}
+<div class="inner-page">
+  <h1 class="page-title">اتصل بنا</h1>
+
+  <div class="glass-card" style="margin-bottom:var(--space-lg)">
+    <h2 style="font-size:1.1rem;font-weight:500;color:var(--teal-800);margin-bottom:var(--space-md)">المطوّرون</h2>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-sm)">
+      <li style="font-size:.95rem">
+        برمجة المكتبات والموقع:
+        <a href="http://tahadz.wordpress.com" rel="noopener noreferrer">طه زروقي</a>
+        — <span style="color:var(--text-muted);direction:ltr;unicode-bidi:isolate">taha.zerrouki at gmail dot com</span>
+      </li>
+      <li style="font-size:.95rem">
+        برمجة واجهة الموقع:
+        <a href="https://www.linkedin.com/in/tarek-berkane-58bb151ba/" rel="noopener noreferrer">طارق بركان</a>
+        — <span style="color:var(--text-muted);direction:ltr;unicode-bidi:isolate">berkane.t320 at gmail dot com</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="glass-card" style="margin-bottom:var(--space-lg)">
+    <h2 style="font-size:1.1rem;font-weight:500;color:var(--teal-800);margin-bottom:var(--space-md)">تواصل معنا</h2>
+    <!-- Disqus comments (third-party — loads on user action to respect privacy) -->
+    <div id="disqus-placeholder" style="text-align:center;padding:var(--space-xl)">
+      <p style="color:var(--text-muted);margin-bottom:var(--space-md)">اضغط لتحميل التعليقات (Disqus)</p>
+      <button type="button" class="btn-pill-outline" id="load-disqus">تحميل التعليقات</button>
+    </div>
+    <div id="disqus_thread" style="display:none"></div>
+  </div>
+
+  <div class="glass-card">
+    <h2 style="font-size:1.1rem;font-weight:500;color:var(--teal-800);margin-bottom:var(--space-md)">نموذج الاتصال</h2>
+    <div style="overflow:hidden;border-radius:var(--radius-input)">
+      <iframe
+        title="نموذج الاتصال"
+        height="500"
+        style="width:100%;border:none"
+        src="https://docs.google.com/spreadsheet/embeddedform?formkey=dG9vWVQ2NG9JaUNCOGRYYkdkZ2pKOGc6MA"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="module">
+  document.getElementById('load-disqus')?.addEventListener('click', () => {
+    document.getElementById('disqus-placeholder').style.display = 'none';
+    document.getElementById('disqus_thread').style.display = 'block';
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://mishkal.disqus.com/embed.js';
+    document.body.appendChild(s);
+  });
+</script>
+{% endblock %}

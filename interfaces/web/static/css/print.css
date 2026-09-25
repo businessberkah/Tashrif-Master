@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════════
+   print.css — clean print stylesheet
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+  /* Remove all decoration */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-family: 'Amiri', 'Traditional Arabic', Arial, sans-serif;
+    font-size: 11pt;
+  }
+
+  /* Hide non-essential elements */
+  .navbar-pill,
+  .site-footer,
+  .converter-section,
+  .features-strip,
+  .result-toolbar,
+  .suggest-area,
+  .hero,
+  .no-print,
+  .btn-pill-primary,
+  .btn-pill-cta,
+  .btn-pill-outline,
+  .btn-icon,
+  .state-container,
+  .settings-popover,
+  .toast-banner {
+    display: none !important;
+  }
+
+  /* Show only the result */
+  .result-section {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .verb-info-strip {
+    border: 1px solid #ccc;
+    background: #fff;
+    box-shadow: none;
+    padding: 8pt;
+    margin-bottom: 8pt;
+  }
+
+  .voice-tabs { display: none; }
+
+  /* Table */
+  .table-wrapper {
+    overflow: visible;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+  .table-wrapper::before,
+  .table-wrapper::after { display: none; }
+
+  .conj-table {
+    width: 100%;
+    font-size: 9pt;
+    border-collapse: collapse;
+  }
+  .conj-table th {
+    background: #023D3D !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 4pt 6pt;
+    font-size: 7pt;
+  }
+  .conj-table td {
+    border: 1px solid #ccc;
+    padding: 4pt 6pt;
+    background: #fff !important;
+  }
+  .conj-table td:first-child {
+    background: #f5f5f5 !important;
+    position: static;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .conj-table tbody tr:nth-child(odd) td {
+    background: #f9f9f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Page break */
+  .conj-table thead { page-break-after: avoid; }
+  .conj-table tr    { page-break-inside: avoid; }
+
+  /* Page title from verb-info */
+  .verb-info-verb { font-size: 18pt; }
+
+  a[href]::after {
+    content: none; /* don't print URLs */
+  }
+}

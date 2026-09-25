@@ -1,0 +1,175 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero" aria-label="مقدمة">
+
+  <div class="stat-badge stat-card-upper">
+    <div class="stat-badge-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+    </div>
+    <div class="stat-badge-info">
+      <span class="stat-badge-label" data-i18n="statVerbsLabel">Kata Kerja</span>
+      <span class="stat-badge-value" data-i18n="statVerbsCount">٢٢،٥١٧</span>
+    </div>
+  </div>
+
+  <div class="stat-badge stat-card-lower">
+    <div class="stat-badge-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div class="stat-badge-info">
+      <span class="stat-badge-label" data-i18n="statTensesLabel">Bentuk & Waktu</span>
+      <span class="stat-badge-value" data-i18n="statTensesCount">١٢</span>
+    </div>
+  </div>
+
+  <div class="arc-badge-wrap" aria-hidden="true">
+    <svg width="140" height="140" viewBox="0 0 140 140">
+      <circle cx="70" cy="70" r="55" fill="none" stroke="var(--mist-300)" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <g class="arc-badge-rotating" style="transform-origin:70px 70px">
+        <text>
+          <textPath href="#arcPath" startOffset="0%" id="arc-badge-text">صرّف · تعلّم · اكتشف · الشافعي · </textPath>
+        </text>
+      </g>
+      <defs>
+        <path id="arcPath" d="M70,70 m-55,0 a55,55 0 1,1 110,0 a55,55 0 1,1 -110,0"/>
+      </defs>
+      <circle cx="70" cy="70" r="26" fill="var(--teal-700)" opacity=".1"/>
+      <text x="70" y="78" text-anchor="middle" font-size="26" font-family="Amiri,serif" fill="var(--teal-800)">ف</text>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <h1 class="hero-headline" id="hero-headline" data-i18n-html="heroHeadline">
+      Konjugasi Kata Kerja Arab<br>dalam Sekejap
+    </h1>
+    <p class="hero-subtitle" data-i18n="heroSubtitle">
+      Mesin cerdas Asy-Syafee mengonjugasi lebih dari 22.000 kata kerja bahasa Arab ke seluruh bentuk waktu, ragam gramatika, dan subjek/dhamir.
+    </p>
+    <div class="hero-stats-row" aria-hidden="true" style="display:none"></div>
+    <button type="button" class="btn-pill-cta" data-action="start">
+      <span data-i18n="heroCta">Mulai Konjugasi</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+</section>
+
+<!-- Converter Section -->
+<section class="converter-section" aria-label="أداة التصريف">
+  <div class="converter-bar">
+    <div class="converter-bar-row">
+
+      <div class="converter-bar-input-wrap">
+        <label for="verb-input" class="visually-hidden" data-i18n="inputAria">Masukkan kata kerja Arab</label>
+        <input
+          id="verb-input"
+          class="verb-input"
+          type="text"
+          name="verb"
+          value="{{ verb | default('', true) }}"
+          data-i18n-placeholder="inputPlaceholder"
+          placeholder="Ketik kata kerja Arab (misal: كتب)..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          inputmode="text"
+          dir="rtl"
+          aria-label="Masukkan kata kerja Arab"
+        >
+      </div>
+
+      <div class="converter-bar-controls">
+        <label for="future-type-select" class="visually-hidden" data-i18n="futureVowelAria">Vokal Fi'il Mudhari'</label>
+        <select id="future-type-select" class="select-input" aria-label="حركة المضارع">
+          <option value="فتحة"  {% if future_type == 'فتحة'  %}selected{% endif %} data-i18n="futureVowelFatha">Fathah (يَفْعَل)</option>
+          <option value="ضمة"   {% if future_type == 'ضمة'   %}selected{% endif %} data-i18n="futureVowelDamma">Dhammah (يَفْعُل)</option>
+          <option value="كسرة"  {% if future_type == 'كسرة'  %}selected{% endif %} data-i18n="futureVowelKasra">Kasrah (يَفْعِل)</option>
+        </select>
+
+        <div class="segmented" role="group" aria-label="نوع الفعل" id="voice-segmented">
+          <button class="segmented-btn active" type="button" data-trans="1" aria-pressed="true" data-i18n="transitiveActive">Transitif</button>
+          <button class="segmented-btn"        type="button" data-trans="0" aria-pressed="false" data-i18n="transitivePassive">Intransitif</button>
+        </div>
+
+        <button class="btn-pill-cta" type="button" id="conjugate-btn" aria-label="صرّف الفعل">
+          <span data-i18n="conjugateBtn">Konjugasi</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="example-chips-row" aria-label="أمثلة">
+      <span class="example-chips-label" data-i18n="examplesLabel">Contoh:</span>
+      {% for v in [('كَتَبَ', 'كتب'), ('قَالَ', 'قال'), ('رَمَى', 'رمى'), ('وَعَدَ', 'وعد'), ('مَدَّ', 'مد'), ('سَأَلَ', 'سأل')] %}
+      <button class="chip" type="button" data-example-verb="{{ v[1] }}" aria-label="جرّب الفعل {{ v[0] }}">{{ v[0] }}</button>
+      {% endfor %}
+      <button class="chip" type="button" data-action="random" aria-label="فعل عشوائي">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+        <span data-i18n="randomBtn">Acak</span>
+      </button>
+    </div>
+
+    <div class="advanced-options-row">
+      <button class="collapsible-toggle" type="button" id="advanced-toggle" aria-expanded="false" aria-controls="advanced-body">
+        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        <span data-i18n="advancedToggle">Opsi Lanjutan</span>
+      </button>
+      <div class="collapsible-body" id="advanced-body">
+        <div class="checkbox-group" role="group" aria-label="الأزمنة المطلوبة">
+          <label class="check-label"><input type="checkbox" id="all-checkbox" checked> <span data-i18n="checkAll">Semua Waktu</span></label>
+          <label class="check-label"><input type="checkbox" id="past-checkbox"> <span data-i18n="checkPast">Fi'il Madhi</span></label>
+          <label class="check-label"><input type="checkbox" id="future-checkbox"> <span data-i18n="checkFuture">Fi'il Mudhari'</span></label>
+          <label class="check-label"><input type="checkbox" id="imperative-checkbox"> <span data-i18n="checkImperative">Fi'il Amar</span></label>
+          <label class="check-label"><input type="checkbox" id="passive-checkbox"> <span data-i18n="checkPassive">Bentuk Pasif (Majhul)</span></label>
+          <label class="check-label"><input type="checkbox" id="future-moode-checkbox"> <span data-i18n="checkFutureMoode">Mudhari' Manshub & Majzum</span></label>
+          <label class="check-label"><input type="checkbox" id="confirmed-checkbox"> <span data-i18n="checkConfirmed">Muakkad (Nun Taukid)</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Result Section -->
+<section class="result-section" aria-label="نتائج التصريف" aria-live="polite" aria-atomic="false">
+  <div id="suggest-area" class="suggest-area" aria-live="polite" aria-label="اقتراحات بديلة"></div>
+  <div id="result-area"></div>
+</section>
+
+<!-- Features Strip -->
+<section class="converter-section" aria-label="مزايا الشافعي">
+  <div class="features-strip">
+    <div class="feature-item">
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <div>
+        <p class="feature-title" data-i18n="feat1Title">Konjugasi Lengkap & Akurat</p>
+        <p class="feature-subtitle" data-i18n="feat1Sub">Mencakup semua waktu, bentuk, dan dhomir untuk kata kerja tsulatsi maupun mazid.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </div>
+      <div>
+        <p class="feature-title" data-i18n="feat2Title">API Terbuka & Gratis</p>
+        <p class="feature-subtitle" data-i18n="feat2Sub">Disediakan endpoint REST API gratis dengan format JSON standar.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div>
+        <p class="feature-title" data-i18n="feat3Title">Harakat Berwarna Dinamis</p>
+        <p class="feature-subtitle" data-i18n="feat3Sub">Sorotan warna pada harakat untuk mempermudah pembacaan dan pembelajaran.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

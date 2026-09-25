@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block document_title %}<title>قطرب | المشاريع</title>{% endblock %}
+
+{% block content %}
+<div class="inner-page">
+  <h1 class="page-title">المكتبات البرمجية</h1>
+
+  <div class="projects-grid" id="libraries-grid">
+    {% for library in libraries %}
+    <div class="project-card {% if loop.index > 8 %}extra-project{% endif %}">
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 9h-7a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h3"/><path d="M12 15h7a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-3"/><path d="M8 9V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <a href="{{ library.link }}" target="_blank" rel="noopener noreferrer" style="color:var(--teal-700);font-weight:500;display:block;margin-bottom:4px">{{ library.title }}</a>
+        <p style="font-size:.85rem;color:var(--text-muted);margin:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ library.description }}</p>
+        <div style="margin-top:6px;display:flex;gap:8px">
+          <a href="{{ library.link }}" target="_blank" rel="noopener noreferrer" style="font-size:.8rem;color:var(--teal-500)">رابط المكتبة</a>
+          {% if library.website %}<a href="{{ library.website }}" target="_blank" rel="noopener noreferrer" style="font-size:.8rem;color:var(--teal-500)">الموقع</a>{% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if libraries|length > 8 %}
+  <div style="text-align:center;margin-top:var(--space-lg)">
+    <button type="button" class="btn-pill-outline" id="show-more-libs" style="font-size:.9rem">إظهار المزيد</button>
+  </div>
+  {% endif %}
+
+  <h2 class="page-title" style="margin-top:var(--space-2xl)">مشاريع أخرى</h2>
+
+  <div class="projects-grid" id="websites-grid">
+    {% for website in websites %}
+    <div class="project-card {% if loop.index > 8 %}extra-website{% endif %}">
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div>
+        <a href="{{ website.link }}" target="_blank" rel="noopener noreferrer" style="color:var(--teal-700);font-weight:500">{{ website.title }}</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if websites|length > 8 %}
+  <div style="text-align:center;margin-top:var(--space-lg)">
+    <button type="button" class="btn-pill-outline" id="show-more-sites" style="font-size:.9rem">إظهار المزيد</button>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="module">
+  // Show-more buttons — toggle extra items visibility
+  const toggle = (gridId, cls, btn) => {
+    document.querySelectorAll(`#${gridId} .${cls}`).forEach(el => el.style.display = '');
+    btn?.remove();
+  };
+  document.getElementById('show-more-libs')?.addEventListener('click', function() {
+    toggle('libraries-grid', 'extra-project', this);
+  });
+  document.getElementById('show-more-sites')?.addEventListener('click', function() {
+    toggle('websites-grid', 'extra-website', this);
+  });
+  // Hide extras initially
+  document.querySelectorAll('.extra-project,.extra-website').forEach(el => el.style.display = 'none');
+</script>
+{% endblock %}

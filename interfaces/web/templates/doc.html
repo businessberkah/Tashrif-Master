@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block document_title %}<title>قطرب | التوثيق وواجهة API</title>{% endblock %}
+
+{% block content %}
+<div class="inner-page">
+  <h1 class="page-title">التوثيق</h1>
+
+  <!-- ── Overview ── -->
+  <div class="glass-card" style="margin-bottom:var(--space-lg)">
+    <h2 style="font-size:1.2rem;margin-bottom:var(--space-md);color:var(--teal-800)">نبذة عن قطرب</h2>
+    <p>
+      <strong>قُطْرُب</strong> محرّك متكامل لتصريف الأفعال العربية، يدعم أكثر من ٢٢ ألف فعل
+      (ثلاثية، رباعية، مزيدة) بكل أزمنتها الاثني عشر وصيغ البناء للمعلوم والمجهول والأمر.
+      يمكن استخدامه عبر الموقع أو عبر واجهة API مفتوحة.
+    </p>
+    <p>
+      المصدر مفتوح على <a href="https://github.com/linuxscout/qutrub" rel="noopener noreferrer">GitHub</a>
+      بموجب رخصة GPL. أُنتج بدعم مجموعة <a href="https://arabeyes.org/" rel="noopener">عربايز</a>.
+    </p>
+  </div>
+
+  <!-- ── API Reference ── -->
+  <h2 class="page-title" id="api" style="margin-top:var(--space-2xl);font-size:1.5rem">واجهة API</h2>
+
+  <div class="glass-card" style="margin-bottom:var(--space-lg)">
+    <h3 style="font-size:1.1rem;margin-bottom:var(--space-md);color:var(--teal-700)">GET — تصريف فعل</h3>
+    <p class="api-endpoint api-get">
+      <span class="method-badge method-get">GET</span>
+      /api?verb=&lt;فعل&gt;&amp;haraka=&lt;حركة&gt;&amp;trans=&lt;0|1&gt;
+    </p>
+    <p style="margin-bottom:var(--space-md);color:var(--text-muted);font-size:.9rem">
+      أو بديلاً عبر المسار: <code style="background:var(--mist-100);padding:2px 6px;border-radius:4px">/api/&lt;verb&gt;/&lt;haraka&gt;</code>
+    </p>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:var(--space-md);font-size:.9rem;direction:rtl">
+      <thead>
+        <tr style="background:var(--teal-800);color:#fff">
+          <th style="padding:8px 12px;text-align:right">المعامل</th>
+          <th style="padding:8px 12px;text-align:right">القيم المقبولة</th>
+          <th style="padding:8px 12px;text-align:right">الوصف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--mist-300)">
+          <td style="padding:8px 12px"><code>verb</code></td>
+          <td style="padding:8px 12px">فعل عربي مشكّل أو غير مشكّل</td>
+          <td style="padding:8px 12px">الفعل المراد تصريفه</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--mist-300)">
+          <td style="padding:8px 12px"><code>haraka</code></td>
+          <td style="padding:8px 12px">a · u · i · فتحة · ضمة · كسرة</td>
+          <td style="padding:8px 12px">حركة فاء المضارع (افتراضي: فتحة)</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px"><code>trans</code></td>
+          <td style="padding:8px 12px">0 · 1</td>
+          <td style="padding:8px 12px">0 = لازم، 1 = متعدٍّ (افتراضي: 1)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:var(--space-sm)">مثال:</p>
+    <div class="code-block">
+      <button class="code-copy-btn" type="button" onclick="navigator.clipboard.writeText(this.previousSibling?.textContent||this.parentElement.textContent.trim()).then(()=>this.textContent='✓ نُسخ').catch(()=>{});setTimeout(()=>this.textContent='نسخ',2000)">نسخ</button>
+      <pre style="margin:0;white-space:pre-wrap">curl "https://qutrub.arabeyes.org/api?verb=كتب&amp;haraka=u&amp;trans=1"</pre>
+    </div>
+    <p style="font-size:.85rem;color:var(--text-muted);margin:var(--space-md) 0 var(--space-sm)">مثال على الاستجابة (مقتطف):</p>
+    <div class="code-block">
+<pre style="margin:0;white-space:pre-wrap">{
+  "result": {
+    "0": {"0": "الضمير", "1": "الماضي", "2": "المضارع المرفوع", ...},
+    "1": {"0": "هو",     "1": "كَتَبَ",  "2": "يَكْتُبُ",       ...},
+    ...
+  },
+  "verb_info": "الفعل كَتَبَ - يَكْتُبُ فعل ثلاثي متعدي سالم",
+  "suggest": []
+}</pre>
+    </div>
+  </div>
+
+  <div class="glass-card" style="margin-bottom:var(--space-lg)">
+    <h3 style="font-size:1.1rem;margin-bottom:var(--space-md);color:var(--teal-700)">POST — تصريف مع خيارات متقدمة</h3>
+    <p class="api-endpoint api-post">
+      <span class="method-badge method-post">POST</span>
+      /ajaxGet
+    </p>
+    <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:var(--space-md)">يقبل JSON بالشكل:</p>
+    <div class="code-block">
+<pre style="margin:0;white-space:pre-wrap">{
+  "data": {
+    "action":       "Conjugate",
+    "text":         "كتب",
+    "future_type":  "ضمة",
+    "transitive":   true,
+    "all":          true,
+    "past":         false,
+    "future":       false,
+    "imperative":   false,
+    "passive":      false,
+    "future_moode": false,
+    "confirmed":    false
+  }
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── Usage examples ── -->
+  <div class="glass-card">
+    <h3 style="font-size:1.1rem;margin-bottom:var(--space-md);color:var(--teal-700)">أمثلة للمطوّرين</h3>
+
+    <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:var(--space-xs)">Python:</p>
+    <div class="code-block">
+<pre style="margin:0;white-space:pre-wrap">import requests
+r = requests.get("https://qutrub.arabeyes.org/api",
+                 params={"verb": "كتب", "haraka": "u", "trans": 1})
+data = r.json()
+print(data["verb_info"])</pre>
+    </div>
+
+    <p style="font-size:.85rem;color:var(--text-muted);margin:var(--space-md) 0 var(--space-xs)">JavaScript (Fetch):</p>
+    <div class="code-block">
+<pre style="margin:0;white-space:pre-wrap">const res  = await fetch('/api?verb=كتب&haraka=u&trans=1');
+const data = await res.json();
+console.log(data.verb_info);</pre>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

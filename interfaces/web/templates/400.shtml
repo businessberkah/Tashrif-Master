@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block document_title %}<title>قطرب | 400 — طلب غير صالح</title>{% endblock %}
+{% block content %}
+<div class="error-page">
+  <div class="error-card glass-card">
+    <p class="error-code" aria-hidden="true">٤٠٠</p>
+    <h1 class="error-title">طلب غير صالح</h1>
+    <p class="error-subtitle">البيانات المرسلة غير مكتملة أو بصيغة غير مدعومة. يرجى التحقق من المدخلات والمحاولة مجدداً.</p>
+    <a href="{{ url_for('home') }}" class="btn-pill-cta">العودة إلى الرئيسية</a>
+  </div>
+</div>
+{% endblock %}
